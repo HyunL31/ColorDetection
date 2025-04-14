@@ -8,18 +8,18 @@ using UnityEngine.UI;
 
 public class MemoryColor : MonoBehaviour
 {
-    [Header("¸ðµ¨ ¼³Á¤")]
+    [Header("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public List<GameObject> modelPrefabs;
     private int currentModelIndex = 0;
     private GameObject modelInstance;
     private List<PaintTarget> paintTargets = new();
     private Color[] answerColors;
 
-    [Header("»ö»ó ¼³Á¤")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public Color[] availableColors;
     private Color selectedColor = Color.white;
 
-    [Header("AR ¼³Á¤")]
+    [Header("AR ï¿½ï¿½ï¿½ï¿½")]
     public ARRaycastManager arRaycast;
     public Camera arCamera;
     private List<ARRaycastHit> hits = new();
@@ -126,15 +126,16 @@ public class MemoryColor : MonoBehaviour
         {
             Color col = paintTargets[i].GetCurrentColor();
             answerColors[i] = col;
-            Debug.Log($"Á¤´ä ÀúÀå - ÆÄÃ÷ {i}: {ColorTo255(col)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ {i}: {ColorTo255(col)}");
         }
-
-        // Ã£¾Æ¾ßÇÏ´Â ÄÃ·¯¸®½ºÆ® Àü´Þ!!
+        /*
+        // Ã£ï¿½Æ¾ï¿½ï¿½Ï´ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½!!
         if (colorDetection != null)
         {
             List<Color> answerColorList = new List<Color>(answerColors);
             colorDetection.DetectColorOnDemand(answerColorList);
         }
+        */
     }
 
     string ColorTo255(Color c)
@@ -144,22 +145,24 @@ public class MemoryColor : MonoBehaviour
 
     IEnumerator ShowAnswerThenStartGame()
     {
-        // Á¤´ä »ö»ó Ç¥½Ã
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½
         for (int i = 0; i < paintTargets.Count; i++)
         {
             paintTargets[i].Paint(answerColors[i]);
         }
 
-        // 1ÃÊ ´ë±â
+        // 1ï¿½ï¿½ ï¿½ï¿½ï¿½
         yield return new WaitForSeconds(1f);
 
-        // Èò»öÀ¸·Î ÃÊ±âÈ­
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         foreach (var target in paintTargets)
         {
             target.Paint(Color.white);
         }
 
         isColoringPhase = true;
+        //for end coroutine
+        yield break;
     }
 
 
@@ -185,16 +188,16 @@ public class MemoryColor : MonoBehaviour
 
         if (correct == paintTargets.Count)
         {
-            Debug.Log("Á¤´ä");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½");
             success.SetActive(true);
             isColoringPhase = false;
 
-            // ´ÙÀ½ ¸ðµ¨ ÀÚµ¿ ·Îµù (2ÃÊ ÈÄ)
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Úµï¿½ ï¿½Îµï¿½ (2ï¿½ï¿½ ï¿½ï¿½)
             Invoke(nameof(LoadNextFromCurrentPos), 2f);
         }
         else
         {
-            Debug.Log($"¿À´ä. {correct}°³ ¸ÂÃã / {paintTargets.Count}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½. {correct}ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ / {paintTargets.Count}");
             fail.SetActive(true);
             retry.gameObject.SetActive(true);
             submit.gameObject.SetActive(false);
@@ -221,24 +224,24 @@ public class MemoryColor : MonoBehaviour
 
     public void Retry()
     {
-        // ¸ðµ¨ Á¦°Å
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (modelInstance != null)
         {
             Destroy(modelInstance);
             modelInstance = null;
         }
 
-        // UI ÃÊ±âÈ­
+        // UI ï¿½Ê±ï¿½È­
         fail.SetActive(false);
         retry.gameObject.SetActive(false);
         submit.gameObject.SetActive(true);
         success.SetActive(false);
 
-        // »óÅÂ ÃÊ±âÈ­
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         modelSpawned = false;
         isColoringPhase = false;
 
-        // ´Ù½Ã »ý¼º
+        // ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Vector2 centerScreen = new Vector2(Screen.width / 2f, Screen.height / 2f);
         if (arRaycast.Raycast(centerScreen, hits, TrackableType.PlaneWithinPolygon))
         {
@@ -257,11 +260,8 @@ public class MemoryColor : MonoBehaviour
             }
 
             GenerateAnswerColors();
-
-            foreach (var target in paintTargets)
-                target.Paint(Color.white);
-
             StartCoroutine(ShowAnswerThenStartGame());
+            StartColorDetect();
         }
     }
 
@@ -286,10 +286,8 @@ public class MemoryColor : MonoBehaviour
 
         GenerateAnswerColors();
 
-        foreach (var target in paintTargets)
-            target.Paint(Color.white);
-
         StartCoroutine(ShowAnswerThenStartGame());
+        StartColorDetect();
     }
 
     public void NextColor()
@@ -318,5 +316,11 @@ public class MemoryColor : MonoBehaviour
         colorPanel2.SetActive(true);
         colorPanel3.SetActive(false);
         colorPanel1.SetActive(false);
+    }
+
+    //for check condition for colordetection and execute it.
+    private void StartColorDetect(){
+        if (colorDetection != null)
+            colorDetection.StartColorDetect(answerColors);
     }
 }
