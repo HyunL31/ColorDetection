@@ -4905,7 +4905,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2073000635}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ColorDetection, Assembly-CSharp
         m_MethodName: DetectColorOnDemand
         m_Mode: 1
@@ -6554,7 +6554,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2073000634}
   - component: {fileID: 2073000632}
-  - component: {fileID: 2073000635}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -6600,7 +6599,7 @@ MonoBehaviour:
   colorPanel1: {fileID: 1819367897}
   colorPanel2: {fileID: 1414610705}
   colorPanel3: {fileID: 1961472688}
-  colorDetection: {fileID: 2073000635}
+  colorDetection: {fileID: 0}
 --- !u!4 &2073000634
 Transform:
   m_ObjectHideFlags: 0
@@ -6616,25 +6615,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2073000635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2073000631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 480f0633a4dd52b49823fed9ab897e3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraManager: {fileID: 309009670}
-  colorTolerance: 0.3
-  targetColorListUI: {fileID: 1890201195}
-  referenceUI: {fileID: 7135958278668261509, guid: 69d4d5cfb3369cb41b1dbb71fc9ba31c,
-    type: 3}
-  centerUI: {fileID: 1291662757}
-  colorPaletteUI: {fileID: 536417588}
 --- !u!1 &2075352057
 GameObject:
   m_ObjectHideFlags: 0

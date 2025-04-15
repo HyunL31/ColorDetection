@@ -6,7 +6,7 @@ using UnityEngine.XR.ARSubsystems;
 using Unity.Collections;
 using UnityEngine.Android;
 
-public class ColorDetection : MonoBehaviour
+public class ColorDetector : MonoBehaviour
 {
     public ARCameraManager cameraManager;
     public float colorTolerance = 0.2f;  // 색상 허용 오차 범위

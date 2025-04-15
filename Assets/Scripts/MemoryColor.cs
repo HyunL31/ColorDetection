@@ -35,7 +35,7 @@ public class MemoryColor : MonoBehaviour
     public GameObject colorPanel2;
     public GameObject colorPanel3;
 
-    [SerializeField] private ColorDetection colorDetection;
+    [SerializeField] private ColorDetector colorDetection;
 
     void Start()
     {
