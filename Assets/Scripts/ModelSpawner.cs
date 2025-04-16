@@ -1,16 +1,13 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class ModelSpawner : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public event EventHandler OnModelSpawn;
+    private GameObject modelInScene;
+    public void SpawnModel(Vector3 spawnPosition, GameObject prefab){
+        modelInScene = Instantiate(prefab,spawnPosition,Quaternion.identity);
+        OnModelSpawn?.Invoke(this,EventArgs.Empty);
     }
 }

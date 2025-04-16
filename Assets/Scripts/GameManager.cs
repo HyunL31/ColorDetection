@@ -1,19 +1,61 @@
-using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    //phases for handle the flow of game
+    public enum GamePhase {
+        Spawn, //spawning is in progress 
+        ColorDetection, //colordetecting is in progress 
+        Coloring, //coloring is in progress 
+        Evaluation //evaluating is in progress 
+    }
+
     [SerializeField] private ColorManager colorManager;
+    [SerializeField] private ModelSpawner modelSpawner;
+    [SerializeField] private List<GameObject> prefabs;
+    public ARRaycastManager arRaycast;
+    private List<ARRaycastHit> hits = new();
+    private int prefabIndex = 0;
+    private List<NewColor> colors;
+    private GameObject presentModel;
+    private 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        presentModel = prefabs[0];
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //input 관련. 두개의 if문을 통해 phase를 명확하게 구분 필요
+    }
+
+    private void SetColors(){
+        if(presentModel!=null){
+            colors = presentModel.GetComponent<AnswerColorList>().GetAnswerColorList();
+        }
+    }
+
+    private void SpawnModel(Vector2 screenPos){
+        if(prefabs==null){
+            return;
+        }
+        if(prefabIndex<prefabs.Count){
+            if (arRaycast.Raycast(screenPos, hits, TrackableType.PlaneWithinPolygon))
+            {
+                Pose hitPose = hits[0].pose;
+                Vector3 adjustedPosition = hitPose.position + new Vector3(0, 0.05f, 0);
+            }
+            //modelSpawner.SpawnModel();
+        }
     }
 
     /*
