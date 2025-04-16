@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System;
 /// <summary>
 /// Have solution color list and check that.
@@ -8,7 +9,8 @@ using System;
 public class ColorManager : MonoBehaviour
 {
     [SerializeField] private ColorDetector colorDetector;
-    public event EventHandler ColorDetectEvent;
+    private AnswerColorList answerColorList; 
+    public UnityEvent ColorDetectEvent;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,5 +21,15 @@ public class ColorManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SetAnswerColorList(GameObject targetObject)
+    {
+        answerColorList = targetObject.GetComponent<AnswerColorList>();
+        answerColorList.SetMaterials();
+    }
+
+    public void SetWhite(){
+        answerColorList.SetAllWhite();
     }
 }

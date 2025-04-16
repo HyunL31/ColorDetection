@@ -14,7 +14,7 @@ public class PaintablePart : MonoBehaviour
 
             for (int i = 0; i < mats.Length; i++)
             {
-                mats[i] = new Material(mats[i]);  // ÀÎ½ºÅÏ½ºÈ­
+                mats[i] = new Material(mats[i]);  // ï¿½Î½ï¿½ï¿½Ï½ï¿½È­
             }
 
             rend.materials = mats;

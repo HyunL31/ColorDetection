@@ -1,0 +1,1 @@
+C:\Users\USER\Desktop\ColorMining\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\6p5v393p\obj\arm64-v8a

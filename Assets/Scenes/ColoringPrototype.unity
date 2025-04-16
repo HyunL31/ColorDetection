@@ -334,7 +334,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &94302894
 RectTransform:
   m_ObjectHideFlags: 0
@@ -776,7 +776,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2073000632}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MemoryColor, Assembly-CSharp
         m_MethodName: BackColor1
         m_Mode: 1
@@ -1463,7 +1463,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2073000632}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MemoryColor, Assembly-CSharp
         m_MethodName: NextColor
         m_Mode: 1
@@ -1531,7 +1531,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &437131036
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1596,7 +1596,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2073000632}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MemoryColor, Assembly-CSharp
         m_MethodName: CheckAnswer
         m_Mode: 1
@@ -2045,7 +2045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &536417587
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2080,7 +2080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1fcea734da1c7499660f08abeafb9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 2073000632}
+  gameManager: {fileID: 0}
 --- !u!1 &541293775
 GameObject:
   m_ObjectHideFlags: 0
@@ -4252,7 +4252,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2073000632}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MemoryColor, Assembly-CSharp
         m_MethodName: NextColor1
         m_Mode: 1
@@ -5946,7 +5946,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1902105535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5991,7 +5991,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2073000632}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MemoryColor, Assembly-CSharp
         m_MethodName: Retry
         m_Mode: 1
@@ -6553,7 +6553,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2073000634}
-  - component: {fileID: 2073000632}
   - component: {fileID: 2073000635}
   - component: {fileID: 2073000638}
   - component: {fileID: 2073000637}
@@ -6565,45 +6564,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2073000632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2073000631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19eb7fdca75990945a4fa2458c22bad6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modelPrefabs:
-  - {fileID: 1404103396393522933, guid: 6c3af9bc5975943448f8ede5bf1ee351, type: 3}
-  - {fileID: 5963897266624307626, guid: 77a4bfa66dbcff64db82900ec1ea322e, type: 3}
-  - {fileID: 4001375253794610450, guid: 36b6294ef87690444ad982177e06a288, type: 3}
-  availableColors:
-  - {r: 1, g: 0.43529412, b: 0, a: 1}
-  - {r: 0.043137256, g: 0.043137256, b: 0.043137256, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 0.20392157, g: 0.05490196, b: 0.047058824, a: 1}
-  - {r: 0.6156863, g: 0.25490198, b: 0.18431373, a: 1}
-  - {r: 0.90588236, g: 0.8666667, b: 0.6392157, a: 1}
-  - {r: 1, g: 0.6, b: 0, a: 1}
-  - {r: 0.8156863, g: 0.11372549, b: 0.047058824, a: 1}
-  - {r: 0.4, g: 0.6313726, b: 0.19607843, a: 1}
-  - {r: 0.49803922, g: 0.24705882, b: 0.5137255, a: 1}
-  - {r: 0.3254902, g: 0.15686275, b: 0.07450981, a: 1}
-  - {r: 1, g: 0.6392157, b: 0.3647059, a: 1}
-  arRaycast: {fileID: 1875879703}
-  arCamera: {fileID: 309009666}
-  success: {fileID: 94302893}
-  fail: {fileID: 2141818246}
-  retry: {fileID: 1902105535}
-  submit: {fileID: 437131037}
-  colorPanel1: {fileID: 1819367897}
-  colorPanel2: {fileID: 1414610705}
-  colorPanel3: {fileID: 1961472688}
-  colorDetection: {fileID: 0}
 --- !u!4 &2073000634
 Transform:
   m_ObjectHideFlags: 0
@@ -6631,12 +6591,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f03cfb9822566d48961ce9e8b142f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorManager: {fileID: 0}
-  modelSpawner: {fileID: 0}
+  colorManager: {fileID: 2073000638}
+  modelSpawner: {fileID: 2073000636}
   prefabs:
   - {fileID: 1404103396393522933, guid: 6c3af9bc5975943448f8ede5bf1ee351, type: 3}
   - {fileID: 5963897266624307626, guid: 77a4bfa66dbcff64db82900ec1ea322e, type: 3}
-  arRaycast: {fileID: 0}
+  arRaycast: {fileID: 1875879703}
+  modelInScene: {fileID: 0}
 --- !u!114 &2073000636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6649,6 +6610,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae8352a9495b4149b8e2ccd465ce825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnModelSpawn:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2073000637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6680,6 +6644,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorDetector: {fileID: 2073000637}
+  ColorDetectEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2075352057
 GameObject:
   m_ObjectHideFlags: 0
@@ -6712,7 +6679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1fcea734da1c7499660f08abeafb9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 2073000632}
+  gameManager: {fileID: 0}
 --- !u!114 &2075352059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7021,7 +6988,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2073000632}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MemoryColor, Assembly-CSharp
         m_MethodName: BackColor2
         m_Mode: 1
@@ -7088,7 +7055,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2141818247
 RectTransform:
   m_ObjectHideFlags: 0
