@@ -1,0 +1,2 @@
+C:\UnityProject\ColorDetection-Coloring\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\UnityProject\ColorDetection-Coloring\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt
