@@ -3,15 +3,19 @@ using System.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     //UI Manager for Other script
     public static UIManager _instance;
     public static UIManager Instance {  get { return _instance; } }
-
     public GameObject UI;
+    public Slider sound;
+    public Toggle[] colorType;
+
     int currentUI = 0;
+    float currentSound = 0.4f;
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -21,9 +25,9 @@ public class UIManager : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(this);
             DontDestroyOnLoad(UI);
+            SoundManager._instance.ControlVol(currentSound);
         }
     }
-
 
     //Go to settings UI
     public void GoSetting()
@@ -41,7 +45,16 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
         StartCoroutine(OnLoad());
     }
- 
+
+    //Loading UI timer
+    IEnumerator OnLoad()
+    {
+        yield return new WaitForSeconds(0.3f);
+        UI.transform.GetChild(0).gameObject.SetActive(true);
+        UI.transform.GetChild(1).gameObject.SetActive(false);
+        OutUI();
+    }
+
     //End the game
     public void QuitGame()
     {
@@ -67,6 +80,23 @@ public class UIManager : MonoBehaviour
         UiTouch(0, 0);
     }
 
+
+    //Adjust Volume
+    public void ScaleVolume()
+    {
+        currentSound = sound.value;
+        SoundManager._instance.ControlVol(currentSound);
+    }
+
+    //Switch color type between RGB and Hexadecimal
+    //0 is RGB(default), 1 is Hexadecimal
+    public void ColorCheck(int type)
+    {
+        colorType[1-type].isOn = colorType[type].isOn == true ? false : true;
+
+        //Notify current color type
+    }
+
     //Load Type can be 0 and 1
     //UI name = {Main, Loading, Settings}
     private void UiTouch(int which, int index, int loadType = 0)
@@ -79,25 +109,17 @@ public class UIManager : MonoBehaviour
 
     }
 
-    //Loading UI timer
-    IEnumerator OnLoad()
-    {
-        yield return new WaitForSeconds(0.3f);
-        UI.transform.GetChild(0).gameObject.SetActive(true);
-        UI.transform.GetChild(1).gameObject.SetActive(false);
-        OutUI();
-    }
-
     //UI on/off
     //pIndex is which Panel. 0 = default, 1 = translucent
     private void InUI(int pIndex)
     {
         Time.timeScale = 0;
+
         if (!UI.activeSelf)
         {
             UI.SetActive(true);
         }
-
+        
         if (pIndex == 0 && !UI.transform.GetChild(pIndex).gameObject.activeSelf)
         {
             UI.transform.GetChild(0).gameObject.SetActive(true);
