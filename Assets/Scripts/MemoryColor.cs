@@ -12,7 +12,7 @@ public class MemoryColor : MonoBehaviour
     public List<GameObject> modelPrefabs;
     private int currentModelIndex = 0;
     private GameObject modelInstance;
-    private List<PaintTarget> paintTargets = new();
+    //private List<PaintTarget> paintTargets = new();
     private Color[] answerColors;
 
     [Header("���� ����")]
@@ -54,6 +54,7 @@ public class MemoryColor : MonoBehaviour
 
     void Update()
     {
+        /*
 #if ENABLE_INPUT_SYSTEM
 #if UNITY_EDITOR
         if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -69,9 +70,9 @@ public class MemoryColor : MonoBehaviour
                 Ray ray = arCamera.ScreenPointToRay(mousePos);
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    PaintTarget target = hit.collider.GetComponent<PaintTarget>();
-                    if (target != null)
-                        target.Paint(selectedColor);
+                    //PaintTarget target = hit.collider.GetComponent<PaintTarget>();
+                    //if (target != null)
+                        //target.Paint(selectedColor);
                 }
             }
         }
@@ -100,6 +101,7 @@ public class MemoryColor : MonoBehaviour
         }
 #endif
 #endif
+*/
     }
 
     void TrySpawnModel(Vector2 screenPos)
@@ -118,6 +120,7 @@ public class MemoryColor : MonoBehaviour
         currentModelIndex++;
     }
 
+/*
     void GenerateAnswerColors()
     {
         answerColors = new Color[paintTargets.Count];
@@ -128,16 +131,16 @@ public class MemoryColor : MonoBehaviour
             answerColors[i] = col;
             Debug.Log($"���� ���� - ���� {i}: {ColorTo255(col)}");
         }
-        /*
+        
         // ã�ƾ��ϴ� �÷�����Ʈ ����!!
         if (colorDetection != null)
         {
             List<Color> answerColorList = new List<Color>(answerColors);
             colorDetection.DetectColorOnDemand(answerColorList);
         }
-        */
+       
     }
-
+    */
     string ColorTo255(Color c)
     {
         return $"({Mathf.RoundToInt(c.r * 255)}, {Mathf.RoundToInt(c.g * 255)}, {Mathf.RoundToInt(c.b * 255)})";
@@ -145,6 +148,7 @@ public class MemoryColor : MonoBehaviour
 
     IEnumerator ShowAnswerThenStartGame()
     {
+        /*
         // ���� ���� ǥ��
         for (int i = 0; i < paintTargets.Count; i++)
         {
@@ -162,7 +166,9 @@ public class MemoryColor : MonoBehaviour
 
         isColoringPhase = true;
         //for end coroutine
+        */
         yield break;
+        
     }
 
 
@@ -173,6 +179,7 @@ public class MemoryColor : MonoBehaviour
 
     public void CheckAnswer()
     {
+        /*
         if (!modelSpawned || !isColoringPhase)
             return;
 
@@ -203,6 +210,7 @@ public class MemoryColor : MonoBehaviour
             submit.gameObject.SetActive(false);
             isColoringPhase = false;
         }
+        */
     }
 
 
@@ -245,12 +253,13 @@ public class MemoryColor : MonoBehaviour
         Vector2 centerScreen = new Vector2(Screen.width / 2f, Screen.height / 2f);
         if (arRaycast.Raycast(centerScreen, hits, TrackableType.PlaneWithinPolygon))
         {
+
             Pose hitPose = hits[0].pose;
             Vector3 adjustedPosition = hitPose.position + new Vector3(0, 0.05f, 0);
 
             LoadModelAtIndex(currentModelIndex - 1, adjustedPosition);
             modelSpawned = true;
-
+/*
             paintTargets.Clear();
             paintTargets.AddRange(modelInstance.GetComponentsInChildren<PaintTarget>());
 
@@ -261,7 +270,7 @@ public class MemoryColor : MonoBehaviour
 
             GenerateAnswerColors();
             StartCoroutine(ShowAnswerThenStartGame());
-            StartColorDetect();
+            */
         }
     }
 
@@ -275,7 +284,7 @@ public class MemoryColor : MonoBehaviour
 
         modelInstance = Instantiate(modelPrefabs[index], spawnPosition, Quaternion.identity);
         modelSpawned = true;
-
+/*
         paintTargets.Clear();
         paintTargets.AddRange(modelInstance.GetComponentsInChildren<PaintTarget>());
 
@@ -287,7 +296,7 @@ public class MemoryColor : MonoBehaviour
         GenerateAnswerColors();
 
         StartCoroutine(ShowAnswerThenStartGame());
-        StartColorDetect();
+        */
     }
 
     public void NextColor()
@@ -316,11 +325,5 @@ public class MemoryColor : MonoBehaviour
         colorPanel2.SetActive(true);
         colorPanel3.SetActive(false);
         colorPanel1.SetActive(false);
-    }
-
-    //for check condition for colordetection and execute it.
-    private void StartColorDetect(){
-        if (colorDetection != null)
-            colorDetection.StartColorDetect(answerColors);
     }
 }

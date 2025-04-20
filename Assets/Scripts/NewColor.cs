@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class NewColor : MonoBehaviour
 {
-    [SerializeField] Color answerColor;
+    public Color answerColor {get; set;}
     public UnityEvent OnColorMaterial;
     private Color presentColor;
     public bool isDetected;

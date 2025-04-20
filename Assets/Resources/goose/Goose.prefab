@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5538285787541611610}
   - component: {fileID: 1439727879987534620}
+  - component: {fileID: 7565055737359243586}
   m_Layer: 0
   m_Name: part6
   m_TagString: Untagged
@@ -55,6 +56,19 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7565055737359243586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677709657140680970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fef30d72240b9ba419b0043c8c85faa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matIndex: 1
 --- !u!1 &1404103396393522933
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,15 +120,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62bc078b3060ef3468d5a135c3409a80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectColorList: []
-  paintableObjects:
-  - {fileID: 7934891988110082381}
-  - {fileID: 6895275171851013894}
-  - {fileID: 9222380301465784795}
-  - {fileID: 677709657140680970}
+  paintableParts: []
   mainGO: {fileID: 3109937926544687675}
-  exceptionIndex: 1
-  colorTolerance: 0.3
+  exceptionIndex: 02000000
+  targetMaterials: []
+  rightColor: []
 --- !u!1 &4693864497321929304
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 848948652382147895}
   - component: {fileID: 8188090726395377711}
+  - component: {fileID: 1853079258397130090}
   m_Layer: 0
   m_Name: part2
   m_TagString: Untagged
@@ -225,6 +236,19 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1853079258397130090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6895275171851013894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fef30d72240b9ba419b0043c8c85faa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matIndex: 1
 --- !u!1 &7742387267189360287
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,7 +314,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2703946727379834398}
   - component: {fileID: 4407144876069417456}
-  - component: {fileID: 4970625569942665061}
+  - component: {fileID: 3647855008701098726}
   m_Layer: 0
   m_Name: part1
   m_TagString: Untagged
@@ -336,7 +360,7 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4970625569942665061
+--- !u!114 &3647855008701098726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -345,14 +369,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7934891988110082381}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d7ba0d3f6a53654f83ce76f46870d8e, type: 3}
+  m_Script: {fileID: 11500000, guid: fef30d72240b9ba419b0043c8c85faa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  answerColor: {r: 1, g: 0.43529412, b: 0, a: 1}
-  OnColorMaterial:
-    m_PersistentCalls:
-      m_Calls: []
-  isDetected: 0
+  matIndex: 1
 --- !u!1 &9222380301465784795
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,6 +383,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4686134461101112981}
   - component: {fileID: 5734659808066677206}
+  - component: {fileID: 4100719508820091810}
   m_Layer: 0
   m_Name: part3
   m_TagString: Untagged
@@ -408,6 +429,19 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4100719508820091810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222380301465784795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fef30d72240b9ba419b0043c8c85faa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matIndex: 0
 --- !u!1001 &2876060463059910506
 PrefabInstance:
   m_ObjectHideFlags: 0

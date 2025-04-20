@@ -9,42 +9,25 @@ using UnityEngine.Android;
 public class ColorDetector : MonoBehaviour
 {
     public ARCameraManager cameraManager;
-    public float colorTolerance = 0.2f;  // 색상 허용 오차 범위
-    [SerializeField] private GameObject targetColorListUI;
-    [SerializeField] private GameObject referenceUI;
-    [SerializeField] private GameObject centerUI;
-    [SerializeField] private ColorPaletteUI colorPaletteUI;
     private Texture2D cameraTexture;
-    private List<TargetColor> targetColorList = new List<TargetColor>();  // 감지하려는 목표 색상
-    private int findColorNum = 0;
+    private NewColor averageColor = null;
 
-    public void StartColorDetect(Color[] colorList){
-        if(centerUI!=null && targetColorListUI!=null && referenceUI!=null){
-            MakeTargetColorList(targetColorList,colorList);
-            targetColorListUI.SetActive(true);
-            centerUI.SetActive(true);
-        }      
-    }
-
-    private void FinishColorDetect(){
-            targetColorListUI.SetActive(false);
-            centerUI.SetActive(false);
-    }
-
-    public void DetectColorOnDemand()
+    public NewColor DetectColorOnDemand()
     {
         if (cameraManager.TryAcquireLatestCpuImage(out XRCpuImage image))
         {
             ProcessCameraImage(image);
             image.Dispose();
+            return averageColor;
         }
         else
         {
             Debug.Log("camera error!");
+            return null;
         }
     }
 
-    void ProcessCameraImage(XRCpuImage image)
+    private void ProcessCameraImage(XRCpuImage image)
     {
 
         // 이미지의 중앙 부분만 선택
@@ -76,19 +59,10 @@ public class ColorDetector : MonoBehaviour
         textureData.Dispose();
 
         // 중앙 부분만 색상 분석
-        Color averageColor = CalculateAverageColor(cameraTexture);
-        Debug.Log(averageColor.r);
-        Debug.Log(averageColor.g);
-        Debug.Log(averageColor.b);
-        if (IsColorMatch(averageColor, targetColorList))
-        {
-            //Finish Color Detection
-            FinishColorDetect();
-        }
-        else
-        {
-            //Debug.Log("please check right color");
-        }
+        averageColor = new NewColor(CalculateAverageColor(cameraTexture),false);
+        Debug.Log(averageColor.answerColor.r);
+        Debug.Log(averageColor.answerColor.g);
+        Debug.Log(averageColor.answerColor.b);
     }
 
     Color CalculateAverageColor(Texture2D texture)
@@ -105,58 +79,6 @@ public class ColorDetector : MonoBehaviour
 
         // 평균 색상 계산
         return sumColor / pixelCount;
-    }
-
-    bool IsColorMatch(Color averageColor, List<TargetColor> targetColorList)
-    {
-        for(int i = 0 ; i<targetColorList.Count ; i++)
-        {
-            if(!targetColorList[i].isDetected){
-                float rDiff = Mathf.Abs(averageColor.r - targetColorList[i].color.r);
-                float gDiff = Mathf.Abs(averageColor.g - targetColorList[i].color.g);
-                float bDiff = Mathf.Abs(averageColor.b - targetColorList[i].color.b);
-                
-                //success color detect in list.
-                if (rDiff <= colorTolerance && gDiff <= colorTolerance && bDiff <= colorTolerance)
-                {
-                    TargetColor tc = targetColorList[i];
-                    tc.isDetected = true;
-                    targetColorList[i] = tc;
-                    findColorNum++;
-                    break;
-                }
-                else Debug.Log("please check right color");
-            }
-        }
-        if(findColorNum==targetColorList.Count)
-            return true;
-        else return false;
-    }
-
-    public struct TargetColor{
-        public bool isDetected;
-        public Color color;
-    }
-
-    private void MakeTargetColorList(List<TargetColor> target, Color[] colors){
-        int posx = -375;
-        int posy = -10;
-        foreach(Color color in colors){
-            TargetColor tc;
-            tc.isDetected = false;
-            tc.color = color;
-            target.Add(tc);
-            GameObject go = Instantiate(referenceUI,targetColorListUI.transform);
-            go.GetComponent<Image>().color = color;
-            go.transform.localPosition = new Vector3(posx,posy,0);
-            if(posx!=375){
-                posx+=150;
-            }
-            else{
-                posx = -375;
-                posy-= 140;
-            }
-        }
     }
     
 }

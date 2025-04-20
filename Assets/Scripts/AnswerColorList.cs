@@ -4,70 +4,102 @@ using UnityEngine;
 
 public class AnswerColorList : MonoBehaviour
 {
-    [SerializeField] private List<NewColor> detectColorList;
-    [SerializeField] private List<GameObject> paintableObjects;
+    [SerializeField] private List<PaintablePart> paintableParts;
     [SerializeField] private GameObject mainGO;
-    [SerializeField] int exceptionIndex;
-    private Material[] targetMaterials;
+    [SerializeField] private int[] exceptionIndex;
+    public Material[] targetMaterials;
+    public List<Color> rightColor;
     private Renderer rend;
-    public float colorTolerance;
 
     public void SetMaterials()
     {
         if(mainGO!=null)
         {
-            Debug.Log("works");
             rend = mainGO.GetComponent<Renderer>();
             targetMaterials = rend.materials;
             for (int i = 0; i < targetMaterials.Length; i++)
             {
-                if(i != exceptionIndex )
-                    targetMaterials[i] = new Material(targetMaterials[i]); 
+                targetMaterials[i] = new Material(targetMaterials[i]);
             }
             rend.materials = targetMaterials;
         }
-    }
-
-    public List<NewColor> GetAnswerColorList()
-    {
-        return detectColorList;
-    }
-
-    public void SetDetectedColorList()
-    {
-        foreach(var mat in targetMaterials){
-            NewColor newColor = new NewColor(mat.color,false);
-            detectColorList.Add(newColor);
-        }
-    }
-
-    public void SetAllWhite(){
-        Debug.Log("set white");
-        foreach(Material mat in targetMaterials)
+        else
         {
-            mat.color = Color.white;
-        }
-    }
-
-//move to colormanager
-/*
-    private void CompareColorList(Color detectedColor)
-    {
-        foreach(NewColor newColor in detectColorList)
-        {
-            if(!newColor.isDetected)
+            int totalMaterialCount = 0;
+            foreach (var obj in paintableParts)
             {
-                float rDiff = Mathf.Abs(detectedColor.r - newColor.answerColor.r);
-                float gDiff = Mathf.Abs(detectedColor.g - newColor.answerColor.g);
-                float bDiff = Mathf.Abs(detectedColor.b - newColor.answerColor.b);
-
-                if (rDiff <= colorTolerance && gDiff <= colorTolerance && bDiff <= colorTolerance)
+                Renderer renderer = obj.GetComponent<Renderer>();
+                if (renderer != null)
                 {
-
+                    totalMaterialCount += renderer.materials.Length;
                 }
+            }
+
+            targetMaterials = new Material[totalMaterialCount];
+            int index = 0;
+
+            foreach (var obj in paintableParts)
+            {
+                Renderer renderer = obj.GetComponent<Renderer>();
+                if (renderer == null) continue;
+
+                Material[] originalMats = renderer.materials;
+                Material[] instanceMats = new Material[originalMats.Length];
+
+                for (int i = 0; i < originalMats.Length; i++)
+                {
+                    instanceMats[i] = new Material(originalMats[i]);
+                    targetMaterials[index++] = instanceMats[i];    
+                }
+
+                renderer.materials = instanceMats;
             }
         }
     }
-    */
 
+    public List<NewColor> SetDetectedColorList()
+    {
+        List<NewColor> detectColorList = new List<NewColor>();
+        for(int i = 0 ; i<targetMaterials.Length ; i++){
+            rightColor.Add(targetMaterials[i].color);
+            if(!exceptionIndex.Contains(i)){
+                NewColor newColor = new NewColor(targetMaterials[i].color,false);
+                detectColorList.Add(newColor);
+            }
+        }
+        return detectColorList;
+    }
+
+    public void SetAllWhite()
+    {
+        for(int i = 0 ; i<targetMaterials.Length ; i++){
+            if(!exceptionIndex.Contains(i))
+                SetColor(Color.white , targetMaterials[i]);
+        }        
+    }
+
+    private void SetColor(Color color, Material mat)
+    {
+        mat.color = color;
+    }
+
+    public void Coloring(Color color, GameObject gameObject)
+    {
+        var go = gameObject.GetComponent<PaintablePart>();
+        if(go!=null)
+        {
+            int index = go.GetMatIndex();
+            SetColor(color,targetMaterials[index]);
+        }
+    }
+
+    public bool CheckCorrect()
+    {
+        for(int i=0 ; i<targetMaterials.Length ; i++)
+        {
+            if(targetMaterials[i].color!=rightColor[i])
+                return false;
+        }
+        return true;
+    }
 }

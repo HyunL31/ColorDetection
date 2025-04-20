@@ -17,14 +17,16 @@ public class GameManager : MonoBehaviour
         Evaluation //evaluating is in progress 
     }
 
+    [SerializeField] private Camera arCamera;
     [SerializeField] private ColorManager colorManager;
     [SerializeField] private ModelSpawner modelSpawner;
+    [SerializeField] private UIManager uIManager;
     [SerializeField] private List<GameObject> prefabs;
     [SerializeField] private ARRaycastManager arRaycast;
-    public GameObject modelInScene;
+    public int modelNum = 0;
+    private GameObject modelInScene;
     private List<ARRaycastHit> hits = new();
     private int prefabIndex = 0;
-    private List<NewColor> colors;
     private GameObject presentModel;
     //present phase
     private GamePhase phase;
@@ -34,10 +36,10 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        presentModel = prefabs[0];
         phase = GamePhase.Spawn;
 
         modelSpawner.OnModelSpawn.AddListener((modelInScene) => AfterModelSpawned(modelInScene));
+        colorManager.OnEndColorDetect.AddListener(StartColoring);
     }
 
     // Update is called once per frame
@@ -64,15 +66,30 @@ public class GameManager : MonoBehaviour
 #endif
         }
 
+        if(phase==GamePhase.Coloring)
+        {
+#if ENABLE_INPUT_SYSTEM
+#if UNITY_EDITOR
+
+#else
+            var touch = Touchscreen.current.primaryTouch;
+            if (touch.press.wasPressedThisFrame)
+            {
+                Vector2 touchPos = touch.position.ReadValue();
+                Ray ray = arCamera.ScreenPointToRay(touchPos);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    GameObject target = hit.collider.gameObject;
+                    if (target != null)
+                        PaintToPart(target);
+                }
+            }
+#endif
+#endif
+        }
+
         //input 관련. 두개의 if문을 통해 phase를 명확하게 구분 필요
         
-    }
-
-    private void SetColors()
-    {
-        if(presentModel!=null){
-            colors = presentModel.GetComponent<AnswerColorList>().GetAnswerColorList();
-        }
     }
 
     private void SpawnModel(Vector2 screenPos)
@@ -81,6 +98,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         if(prefabIndex<prefabs.Count){
+            presentModel = prefabs[prefabIndex];
             if (arRaycast.Raycast(screenPos, hits, TrackableType.PlaneWithinPolygon))
             {
                 Pose hitPose = hits[0].pose;
@@ -101,21 +119,75 @@ public class GameManager : MonoBehaviour
     {
         if(phase==GamePhase.Spawn){
             colorManager.SetAnswerColorList(modelInScene);
+            colorManager.SetHaveToDetectList();
             yield return new WaitForSeconds(1f);
             Debug.Log("reset color");
             colorManager.SetWhite();
+            phase = GamePhase.ColorDetection;
+            StartColorDetect();
             yield break;
         }
     }
 
-    /*
-    여기서는 각 함수의 코드들을 직접실행
-    중요 기능 -> 
-    -ui관리: ui 오브젝트 활성, 비활성
-    -오브젝트 생성: colorMemory에서 해당 기능 받아올 것
-    -colordetection 시작: colordetection 시작, 관련 ui는 그쪽에서 알아서 킬것
-    여기서는 나머지 ui 비활성화
-    -> colordetection 결과는 newColor class들의 리스트로. 이는 생성되는 오브젝트에 저장되어 있을 예정
+    private void StartColorDetect()
+    {
+        Debug.Log("Start Color Detect");
+        uIManager.SetColorDetectUI(true);
+        colorManager.MakeTargetColorUI();
+    }
 
-    */
+    private void StartColoring()
+    {
+        Debug.Log("start coloring phase");
+        phase = GamePhase.Coloring;
+        uIManager.SetColorDetectUI(false);
+        uIManager.SetColoringUI(true);
+        uIManager.SetColoringButton(true);
+        colorManager.MakeColoringUI();
+    }
+
+    private void PaintToPart(GameObject gameObject)
+    {
+        colorManager.Paint(gameObject);
+    }
+
+    public void Submit()
+    {
+        phase = GamePhase.Evaluation;
+        if(colorManager.CheckCorrected()){
+            uIManager.SetSuccssUI(true);
+            uIManager.SetColoringUI(false);
+            StartCoroutine(ToNextModel());
+        }
+        else
+        {
+            uIManager.SetFailUI(true);
+            uIManager.SetColoringButton(false);
+
+        }
+    }
+
+    public void Retry()
+    {
+        uIManager.SetFailUI(false);
+        phase = GamePhase.Coloring;
+        colorManager.SetWhite();
+        uIManager.SetColoringButton(true);
+    }
+
+    private IEnumerator ToNextModel()
+    {
+        yield return new WaitForSeconds(2f);
+        uIManager.SetSuccssUI(false);
+        phase = GamePhase.Spawn;
+        prefabIndex++;
+        ResetAll();
+        yield break;
+    }
+
+    private void ResetAll()
+    {
+        Destroy(modelInScene);
+        isModelSpawned = false;
+    }
 }
