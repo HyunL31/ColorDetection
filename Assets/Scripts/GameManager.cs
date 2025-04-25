@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager uIManager;
     [SerializeField] private List<GameObject> prefabs;
     [SerializeField] private ARRaycastManager arRaycast;
-    public int modelNum = 0;
+    [SerializeField] private HidePlaneMesh hidePlaneManager;
     private GameObject modelInScene;
     private List<ARRaycastHit> hits = new();
     private int prefabIndex = 0;
@@ -92,6 +92,11 @@ public class GameManager : MonoBehaviour
         
     }
 
+    private void PaintToPart(GameObject gameObject)
+    {
+        colorManager.Paint(gameObject);
+    }
+
     private void SpawnModel(Vector2 screenPos)
     {
         if(prefabs==null){
@@ -112,6 +117,8 @@ public class GameManager : MonoBehaviour
     {
         modelInScene = gameObject;
         isModelSpawned = true;
+        //hidePlaneManager.ResetPlane();
+        hidePlaneManager.HideAllPlanes();
         StartCoroutine(ResetColor());
     }
 
@@ -144,11 +151,7 @@ public class GameManager : MonoBehaviour
         uIManager.SetColoringUI(true);
         uIManager.SetColoringButton(true);
         colorManager.MakeColoringUI();
-    }
-
-    private void PaintToPart(GameObject gameObject)
-    {
-        colorManager.Paint(gameObject);
+        hidePlaneManager.ShowAllPlanes();
     }
 
     public void Submit()
@@ -175,6 +178,12 @@ public class GameManager : MonoBehaviour
         uIManager.SetColoringButton(true);
     }
 
+    public void RePose()
+    {
+
+        modelInScene.transform.position = arCamera.transform.forward;
+    }
+
     private IEnumerator ToNextModel()
     {
         yield return new WaitForSeconds(2f);
@@ -189,5 +198,6 @@ public class GameManager : MonoBehaviour
     {
         Destroy(modelInScene);
         isModelSpawned = false;
+        colorManager.ResetNumberOfDetect();
     }
 }

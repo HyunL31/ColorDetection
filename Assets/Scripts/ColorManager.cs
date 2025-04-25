@@ -127,4 +127,9 @@ public class ColorManager : MonoBehaviour
     {
         return answerColorList.CheckCorrect();
     }
+
+    public void ResetNumberOfDetect()
+    {
+        numOfDetect = 0;
+    }
 }
