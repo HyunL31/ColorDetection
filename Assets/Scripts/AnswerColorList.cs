@@ -93,6 +93,14 @@ public class AnswerColorList : MonoBehaviour
         }
     }
 
+    public void ShowCorrectColor()
+    {
+        for(int i=0 ; i<targetMaterials.Length ; i++)
+        {
+            targetMaterials[i].color = rightColor[i];
+        }
+    }
+
     public bool CheckCorrect()
     {
         for(int i=0 ; i<targetMaterials.Length ; i++)

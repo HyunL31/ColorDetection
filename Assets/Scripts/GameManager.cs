@@ -6,11 +6,13 @@ using UnityEngine.XR.ARSubsystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     //phases for handle the flow of game
     public enum GamePhase {
+        Menu,
         Spawn, //spawning is in progress 
         ColorDetection, //colordetecting is in progress 
         Coloring, //coloring is in progress 
@@ -33,16 +35,14 @@ public class GameManager : MonoBehaviour
     //flags
     private bool isModelSpawned = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        phase = GamePhase.Spawn;
-
+        phase = GamePhase.Menu;
         modelSpawner.OnModelSpawn.AddListener((modelInScene) => AfterModelSpawned(modelInScene));
         colorManager.OnEndColorDetect.AddListener(StartColoring);
+        Debug.Log(phase);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(phase==GamePhase.Spawn)
@@ -51,7 +51,8 @@ public class GameManager : MonoBehaviour
 #if UNITY_EDITOR
             if (Mouse.current.leftButton.wasPressedThisFrame && !isModelSpawned){
                 Vector2 mousePos = Mouse.current.position.ReadValue();
-                SpawnModel(mousePos);
+                if(!uIManager.IsOverUI(mousePos))
+                    SpawnModel(mousePos);
             }
 #else
             if (Touchscreen.current == null) return;
@@ -60,7 +61,8 @@ public class GameManager : MonoBehaviour
             if (touch.press.wasPressedThisFrame && !isModelSpawned)
             {
                 Vector2 touchPos = touch.position.ReadValue();
-                SpawnModel(touchPos);
+                if(!uIManager.IsOverUI(touchPos))
+                    SpawnModel(touchPos);
             }
 #endif
 #endif
@@ -77,7 +79,7 @@ public class GameManager : MonoBehaviour
             {
                 Vector2 touchPos = touch.position.ReadValue();
                 Ray ray = arCamera.ScreenPointToRay(touchPos);
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                if (!uIManager.IsOverUI(touchPos) && Physics.Raycast(ray, out RaycastHit hit))
                 {
                     GameObject target = hit.collider.gameObject;
                     if (target != null)
@@ -87,9 +89,12 @@ public class GameManager : MonoBehaviour
 #endif
 #endif
         }
+    }
 
-        //input 관련. 두개의 if문을 통해 phase를 명확하게 구분 필요
-        
+    public void StartGame()
+    {
+        phase = GamePhase.Spawn;
+        hidePlaneManager.ShowAllPlanes();
     }
 
     private void PaintToPart(GameObject gameObject)
@@ -115,25 +120,25 @@ public class GameManager : MonoBehaviour
 
     private void AfterModelSpawned(GameObject gameObject)
     {
+        Debug.Log("model spawned");
         modelInScene = gameObject;
         isModelSpawned = true;
         //hidePlaneManager.ResetPlane();
         hidePlaneManager.HideAllPlanes();
+        phase = GamePhase.ColorDetection;
         StartCoroutine(ResetColor());
     }
 
     private IEnumerator ResetColor()
     {
-        if(phase==GamePhase.Spawn){
-            colorManager.SetAnswerColorList(modelInScene);
-            colorManager.SetHaveToDetectList();
-            yield return new WaitForSeconds(1f);
-            Debug.Log("reset color");
-            colorManager.SetWhite();
-            phase = GamePhase.ColorDetection;
+        colorManager.SetAnswerColorList(modelInScene);
+        colorManager.SetHaveToDetectList();
+        yield return new WaitForSeconds(1f);
+        Debug.Log("reset color");
+        colorManager.SetWhite();
+        if(phase==GamePhase.ColorDetection)
             StartColorDetect();
-            yield break;
-        }
+        yield break;
     }
 
     private void StartColorDetect()
@@ -166,22 +171,28 @@ public class GameManager : MonoBehaviour
         {
             uIManager.SetFailUI(true);
             uIManager.SetColoringButton(false);
-
         }
     }
 
     public void Retry()
     {
         uIManager.SetFailUI(false);
+        colorManager.ShowCorrect();
+        StartCoroutine(ResetColor());
         phase = GamePhase.Coloring;
-        colorManager.SetWhite();
         uIManager.SetColoringButton(true);
     }
 
     public void RePose()
     {
+        float distance = 1.0f;
+        Vector3 forward = arCamera.transform.forward;
+        forward.Normalize();
 
-        modelInScene.transform.position = arCamera.transform.forward;
+        Vector3 spawnPos = arCamera.transform.position + forward * distance;
+        spawnPos.y = spawnPos.y - 0.3f;
+
+        modelInScene.transform.position = spawnPos;
     }
 
     private IEnumerator ToNextModel()
@@ -199,5 +210,14 @@ public class GameManager : MonoBehaviour
         Destroy(modelInScene);
         isModelSpawned = false;
         colorManager.ResetNumberOfDetect();
+    }
+
+    public void Restart(){
+        ResetAll();
+        phase = GamePhase.Menu;
+        uIManager.ReturnStart();
+        uIManager.SetColorDetectUI(false);
+        uIManager.SetColoringUI(false);
+        hidePlaneManager.ResetPlane();
     }
 }

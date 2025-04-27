@@ -37,7 +37,8 @@ public class ColorManager : MonoBehaviour
         answerColorList.SetMaterials();
     }
 
-    public void SetWhite(){
+    public void SetWhite()
+    {
         answerColorList.SetAllWhite();
     }
 
@@ -126,6 +127,11 @@ public class ColorManager : MonoBehaviour
     public bool CheckCorrected()
     {
         return answerColorList.CheckCorrect();
+    }
+
+    public void ShowCorrect()
+    {
+        answerColorList.ShowCorrectColor();
     }
 
     public void ResetNumberOfDetect()

@@ -5,13 +5,14 @@ public class HidePlaneMesh : MonoBehaviour
 {
     [SerializeField] private ARPlaneManager planeManager;
     [SerializeField] private ARSession arSession;
-
     public void HideAllPlanes()
     {
         planeManager.enabled = false;
         
         foreach (var plane in planeManager.trackables)
         {
+            if (plane == null) continue;
+
             var meshRenderer = plane.GetComponent<MeshRenderer>();
             if (meshRenderer != null)
             {
@@ -39,20 +40,22 @@ public class HidePlaneMesh : MonoBehaviour
         
         foreach (var plane in planeManager.trackables)
         {
+            if (plane == null) continue;
+
             var meshRenderer = plane.GetComponent<MeshRenderer>();
-            if (meshRenderer == null)
+            if (meshRenderer != null)
             {
                 meshRenderer.enabled = true;
             }
 
             var meshVisualizer = plane.GetComponent<ARPlaneMeshVisualizer>();
-            if (meshVisualizer == null)
+            if (meshVisualizer != null)
             {
                 meshVisualizer.enabled = true;
             }
 
             var lineRenderer = plane.GetComponent<LineRenderer>();
-            if (lineRenderer == null)
+            if (lineRenderer != null)
             {
                 lineRenderer.enabled = true;
             }
@@ -62,6 +65,10 @@ public class HidePlaneMesh : MonoBehaviour
 
     public void ResetPlane()
     {
+        foreach (var plane in planeManager.trackables)
+        {
+            Destroy(plane.gameObject);
+        }
         arSession.Reset();
     }
 }
