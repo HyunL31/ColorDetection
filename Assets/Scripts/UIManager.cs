@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject successUI;
     [SerializeField] private GameObject failUI;
     [SerializeField] private GameObject menuUI;
+    [SerializeField] private Image currentColor;
     public UnityEvent OnRestart;
 
     private void Awake()
@@ -169,6 +170,12 @@ public class UIManager : MonoBehaviour
         eventData.position = new Vector2(pos.x,pos.y);
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
-        return results.Exists(r => r.gameObject.layer == LayerMask.NameToLayer("UI"));
+        return results.Count > 0;
+    }
+
+    public void SetCurrentUI(Color color)
+    {
+        if(currentColor!=null)
+            currentColor.color = color;
     }
 }
