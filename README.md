@@ -23,3 +23,9 @@ Immersive Media Programming AR Team Project
    (2) Placing 3D model part: To accomplish other mission, players should complete and place 3D models in real world.
       - 3D models can be completed by filling the colors they collected(color restoring).
       - Some 3D models have restrictions, such as minimum number of colors.
+
+5. Credits
+   (1) 3D Model
+       - https://skfb.ly/6ZNF7 (Goose)
+       - https://skfb.ly/6VGFs (Horse)
+       - https://skfb.ly/orUJs (Burger)

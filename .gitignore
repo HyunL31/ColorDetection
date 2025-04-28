@@ -1,0 +1,42 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+
+# Rider
+.idea/
+
+# VSCode
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Auto-generated VS/Mono files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Crash logs
+sysinfo.txt
+*.stacktrace
+
+# AR Foundation generated
+/Assets/Plugins/UnityPurchasing/
+
+# Cache
+*.apk
+*.aab
+*.keystore

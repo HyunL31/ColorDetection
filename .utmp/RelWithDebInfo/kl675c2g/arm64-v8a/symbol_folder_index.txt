@@ -1,0 +1,1 @@
+C:\Users\USER\UnityProject\ColorDetection\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\kl675c2g\obj\arm64-v8a
