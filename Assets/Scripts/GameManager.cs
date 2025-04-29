@@ -156,7 +156,6 @@ public class GameManager : MonoBehaviour
         uIManager.SetColoringUI(true);
         uIManager.SetColoringButton(true);
         colorManager.MakeColoringUI();
-        hidePlaneManager.ShowAllPlanes();
     }
 
     public void Submit()
@@ -202,14 +201,16 @@ public class GameManager : MonoBehaviour
         phase = GamePhase.Spawn;
         prefabIndex++;
         ResetAll();
+        hidePlaneManager.ShowAllPlanes();
         yield break;
     }
 
     private void ResetAll()
     {
+        hidePlaneManager.ResetPlane();
         Destroy(modelInScene);
         isModelSpawned = false;
-        colorManager.ResetNumberOfDetect();
+        colorManager.ResetColorManager();
     }
 
     public void Restart(){

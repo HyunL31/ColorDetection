@@ -21,6 +21,7 @@ public class ColorManager : MonoBehaviour
 
     [Header("Coloring Resource UI")]
     [SerializeField] private GameObject coloringResUI;
+    [SerializeField] private Image currentColor;
 
     [Header("Event")]
     public UnityEvent OnEndColorDetect;
@@ -122,6 +123,13 @@ public class ColorManager : MonoBehaviour
     public void SetPresentColor(Image image)
     {
         presentColor = image.color;
+        SetCurrentUI(presentColor);
+    }
+    
+    private void SetCurrentUI(Color color)
+    {
+        if(currentColor!=null)
+            currentColor.color = color;
     }
 
     public bool CheckCorrected()
@@ -134,8 +142,9 @@ public class ColorManager : MonoBehaviour
         answerColorList.ShowCorrectColor();
     }
 
-    public void ResetNumberOfDetect()
+    public void ResetColorManager()
     {
         numOfDetect = 0;
+        SetCurrentUI(Color.white);
     }
 }
