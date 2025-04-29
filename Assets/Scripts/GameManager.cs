@@ -147,6 +147,11 @@ public class GameManager : MonoBehaviour
         colorManager.SetWhite();
         if(phase==GamePhase.ColorDetection)
             StartColorDetect();
+        else if(phase==GamePhase.Evaluation)
+        {
+            phase = GamePhase.Coloring;
+            uIManager.SetColoringButton(true);
+        }
         yield break;
     }
 
@@ -170,7 +175,8 @@ public class GameManager : MonoBehaviour
     public void Submit()
     {
         phase = GamePhase.Evaluation;
-        if(colorManager.CheckCorrected()){
+        if(colorManager.CheckCorrected())
+        {
             uIManager.SetSuccssUI(true);
             uIManager.SetColoringUI(false);
             SoundManager.Instance.Success();
@@ -189,8 +195,6 @@ public class GameManager : MonoBehaviour
         uIManager.SetFailUI(false);
         colorManager.ShowCorrect();
         StartCoroutine(ResetColor());
-        phase = GamePhase.Coloring;
-        uIManager.SetColoringButton(true);
     }
 
     public void RePose()
@@ -235,6 +239,7 @@ public class GameManager : MonoBehaviour
     public void Restart(){
         ResetAll();
         phase = GamePhase.Menu;
+        prefabIndex = 0;
         uIManager.ReturnStart();
         uIManager.SetColorDetectUI(false);
         uIManager.SetColoringUI(false);
