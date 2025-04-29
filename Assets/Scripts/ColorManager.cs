@@ -146,5 +146,21 @@ public class ColorManager : MonoBehaviour
     {
         numOfDetect = 0;
         SetCurrentUI(Color.white);
+        ResetChildObject(targetColorUI);
+        ResetChildObject(coloringResUI);
+    }
+
+    private void ResetChildObject(GameObject parent)
+    {
+        List<GameObject> gos = new List<GameObject>();
+        parent.GetChildGameObjects(gos);
+        if(gos!=null)
+        {
+            foreach(GameObject go in gos)
+            {
+                go.GetComponent<Image>().color = Color.white;
+                go.SetActive(false);
+            }
+        }
     }
 }
