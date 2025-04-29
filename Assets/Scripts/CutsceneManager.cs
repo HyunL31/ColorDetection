@@ -43,6 +43,7 @@ public class CutsceneManager : MonoBehaviour
 
     private int currentText = 0;
     private int currentPhase = 0;
+    private bool once = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -101,9 +102,16 @@ public class CutsceneManager : MonoBehaviour
                 BGImg.CrossFadeAlpha(0.0f, 2.0f, false);
                 NextTextBtn.SetActive(false);
                 TutorialBtn.SetActive(true);
+                once = false;
             }
         }
 
         currentText += 1;
+    }
+
+    // Check whether the cut scene was watched
+    public bool isCheck()
+    {
+        return once;
     }
 }

@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     private GamePhase phase;
     //flags
     private bool isModelSpawned = false;
+    [SerializeField] private CutsceneManager cm;
 
     void Start()
     {
@@ -93,6 +94,14 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        if (cm.isCheck())
+        {
+            cm.gameObject.SetActive(true);
+            SoundManager.Instance.CutScene();
+        } else
+        {
+            SoundManager.Instance.Tutorial();
+        }
         phase = GamePhase.Spawn;
         hidePlaneManager.ShowAllPlanes();
     }
@@ -164,12 +173,14 @@ public class GameManager : MonoBehaviour
         if(colorManager.CheckCorrected()){
             uIManager.SetSuccssUI(true);
             uIManager.SetColoringUI(false);
+            SoundManager.Instance.Success();
             StartCoroutine(ToNextModel());
         }
         else
         {
             uIManager.SetFailUI(true);
             uIManager.SetColoringButton(false);
+            SoundManager.Instance.Fail();
         }
     }
 
@@ -198,11 +209,19 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         uIManager.SetSuccssUI(false);
-        phase = GamePhase.Spawn;
         prefabIndex++;
         ResetAll();
-        hidePlaneManager.ShowAllPlanes();
-        yield break;
+
+        if (prefabIndex < prefabs.Count)
+        {
+            phase = GamePhase.Spawn;
+            hidePlaneManager.ShowAllPlanes();
+        } else
+        {
+            uIManager.End();
+            prefabIndex = 0;
+        }
+            yield break;
     }
 
     private void ResetAll()
