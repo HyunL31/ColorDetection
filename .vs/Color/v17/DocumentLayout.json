@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\USER\\UnityProject\\Color\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9752E8A1-826F-9BCA-1E5C-67BD6FBC8067}|Assembly-CSharp.csproj|c:\\users\\user\\unityproject\\color\\assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9752E8A1-826F-9BCA-1E5C-67BD6FBC8067}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9752E8A1-826F-9BCA-1E5C-67BD6FBC8067}|Assembly-CSharp.csproj|C:\\Users\\USER\\UnityProject\\Color\\assets\\scripts\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9752E8A1-826F-9BCA-1E5C-67BD6FBC8067}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9752E8A1-826F-9BCA-1E5C-67BD6FBC8067}|Assembly-CSharp.csproj|C:\\Users\\USER\\UnityProject\\Color\\assets\\scripts\\soundmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9752E8A1-826F-9BCA-1E5C-67BD6FBC8067}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\soundmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UIManager.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\UnityProject\\Color\\Assets\\Scripts\\UIManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UIManager.cs",
+              "ToolTip": "C:\\Users\\USER\\UnityProject\\Color\\Assets\\Scripts\\UIManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UIManager.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAQwJgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T11:52:33.074Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\UnityProject\\Color\\Assets\\Scripts\\GameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GameManager.cs",
+              "ToolTip": "C:\\Users\\USER\\UnityProject\\Color\\Assets\\Scripts\\GameManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GameManager.cs",
+              "ViewState": "AgIAANIAAAAAAAAAAAAuwO4AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T11:52:09.955Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SoundManager.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\UnityProject\\Color\\Assets\\Scripts\\SoundManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\SoundManager.cs",
+              "ToolTip": "C:\\Users\\USER\\UnityProject\\Color\\Assets\\Scripts\\SoundManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\SoundManager.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAgwDsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T11:23:10.514Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

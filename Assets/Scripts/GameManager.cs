@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
 
     //flags
     private bool isModelSpawned = false;
+    [SerializeField] private CutsceneManager cm;
 
     /// <summary>
     /// Set phase, subscribe unityevents.
@@ -135,6 +136,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
+        if (cm.isCheck())
+        {
+            cm.gameObject.SetActive(true);
+            SoundManager.Instance.CutScene();
+        } else
+        {
+            SoundManager.Instance.Tutorial();
+        }
         phase = GamePhase.Spawn;
         hidePlaneManager.ShowAllPlanes();
     }
@@ -179,6 +188,11 @@ public class GameManager : MonoBehaviour
         colorManager.SetWhite();
         if(phase==GamePhase.ColorDetection)
             StartColorDetect();
+        else if(phase==GamePhase.Evaluation)
+        {
+            phase = GamePhase.Coloring;
+            uIManager.SetColoringButton(true);
+        }
         yield break;
     }
 
@@ -202,15 +216,18 @@ public class GameManager : MonoBehaviour
     public void Submit()
     {
         phase = GamePhase.Evaluation;
-        if(colorManager.CheckCorrected()){
+        if(colorManager.CheckCorrected())
+        {
             uIManager.SetSuccssUI(true);
             uIManager.SetColoringUI(false);
+            SoundManager.Instance.Success();
             StartCoroutine(ToNextModel());
         }
         else
         {
             uIManager.SetFailUI(true);
             uIManager.SetColoringButton(false);
+            SoundManager.Instance.Fail();
         }
     }
 
@@ -219,8 +236,6 @@ public class GameManager : MonoBehaviour
         uIManager.SetFailUI(false);
         colorManager.ShowCorrect();
         StartCoroutine(ResetColor());
-        phase = GamePhase.Coloring;
-        uIManager.SetColoringButton(true);
     }
 
     public void RePose()
@@ -239,11 +254,19 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         uIManager.SetSuccssUI(false);
-        phase = GamePhase.Spawn;
         prefabIndex++;
         ResetAll();
-        hidePlaneManager.ShowAllPlanes();
-        yield break;
+
+        if (prefabIndex < prefabs.Count)
+        {
+            phase = GamePhase.Spawn;
+            hidePlaneManager.ShowAllPlanes();
+        } else
+        {
+            uIManager.End();
+            prefabIndex = 0;
+        }
+            yield break;
     }
 
     private void ResetAll()
@@ -257,6 +280,7 @@ public class GameManager : MonoBehaviour
     public void Restart(){
         ResetAll();
         phase = GamePhase.Menu;
+        prefabIndex = 0;
         uIManager.ReturnStart();
         uIManager.SetColorDetectUI(false);
         uIManager.SetColoringUI(false);
