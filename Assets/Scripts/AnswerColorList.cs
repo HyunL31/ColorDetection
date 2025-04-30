@@ -8,7 +8,7 @@ public class AnswerColorList : MonoBehaviour
     [SerializeField] private GameObject mainGO;
     [SerializeField] private int[] exceptionIndex;
     public Material[] targetMaterials;
-    public List<Color> rightColor;
+    private List<Color> rightColor;
     private Renderer rend;
 
     public void SetMaterials()

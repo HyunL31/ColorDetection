@@ -4,10 +4,31 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using System;
-using UnityEngine.SceneManagement;
 
+/*
+ * GameManager.cs
+ * 
+ * [Summary]
+ *  - Core controller that manages the overall game flow.
+ *  - Handles transitions between game phases (Spawning, Detection, Coloring, Evaluation).
+ *  - Coordinates major systems such as color detection, model spawning, and user input.
+ * 
+ * [Responsibilities]
+ * 1. Controls timing for showing the correct color briefly and resetting the object.
+ * 2. Switches to coloring phase when all required colors are found.
+ * 3. Handles input during coloring phase (palette selection and object painting).
+ * 4. Manages submit and retry logic, including answer checking and success/failure flow.
+ * 5. Repeats the cycle for the next object after successful submission.
+ * 
+ * [Referenced Components]
+ *  - ColorManager: Handles color tracking, matching, and state updates.
+ *  - ModelSpawner: Responsible for placing and resetting paintable objects.
+ *  - UIManager: Updates the user interface based on the current phase.
+ * 
+ * [Remarks]
+ *  - This script acts as the “brain” of the gameplay loop and communicates with almost all major systems.
+ *  - Ensure that all event subscriptions and cleanups are properly handled to avoid memory leaks.
+ */
 public class GameManager : MonoBehaviour
 {
     //phases for handle the flow of game
@@ -23,26 +44,43 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ColorManager colorManager;
     [SerializeField] private ModelSpawner modelSpawner;
     [SerializeField] private UIManager uIManager;
+
+    //prefabs list for spawning
     [SerializeField] private List<GameObject> prefabs;
     [SerializeField] private ARRaycastManager arRaycast;
+
+    //This manager can control plane detection
     [SerializeField] private HidePlaneMesh hidePlaneManager;
+
+    //This empty gameobject is filled with Instatiated model from modelSpawner. If you want to control
+    //or access the model already spawned, please use this variable.
     private GameObject modelInScene;
     private List<ARRaycastHit> hits = new();
+
+    //Index of model. modelSpawner instantiate from prefabs with this index, so if you want to spawn next model,
+    //please increase this variable.
     private int prefabIndex = 0;
-    private GameObject presentModel;
+
     //present phase
     private GamePhase phase;
+
     //flags
     private bool isModelSpawned = false;
 
+    /// <summary>
+    /// Set phase, subscribe unityevents.
+    /// </summary>
     void Start()
     {
         phase = GamePhase.Menu;
         modelSpawner.OnModelSpawn.AddListener((modelInScene) => AfterModelSpawned(modelInScene));
         colorManager.OnEndColorDetect.AddListener(StartColoring);
-        Debug.Log(phase);
     }
 
+    /// <summary>
+    /// If phase is spawning, update() check 'plane touching event' and spawn model to the point.
+    /// If phase is coloring, update() check 'collider touching event' and change the color of material in the part.
+    /// </summary>
     void Update()
     {
         if(phase==GamePhase.Spawn)
@@ -83,7 +121,7 @@ public class GameManager : MonoBehaviour
                 {
                     GameObject target = hit.collider.gameObject;
                     if (target != null)
-                        PaintToPart(target);
+                        colorManager.Paint(gameObject);
                 }
             }
 #endif
@@ -91,24 +129,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// In main menu, when start button is pressed, this method works.
+    /// Change phase to spawning(now, user can spawn model) and start plane detecting.
+    /// </summary>
     public void StartGame()
     {
         phase = GamePhase.Spawn;
         hidePlaneManager.ShowAllPlanes();
     }
 
-    private void PaintToPart(GameObject gameObject)
-    {
-        colorManager.Paint(gameObject);
-    }
-
+    /// <summary>
+    /// Spawn model to adjusted position made from screenPos.
+    /// </summary>
+    /// <param name="screenPos"></param>
     private void SpawnModel(Vector2 screenPos)
     {
         if(prefabs==null){
             return;
         }
         if(prefabIndex<prefabs.Count){
-            presentModel = prefabs[prefabIndex];
+            GameObject presentModel = prefabs[prefabIndex];
             if (arRaycast.Raycast(screenPos, hits, TrackableType.PlaneWithinPolygon))
             {
                 Pose hitPose = hits[0].pose;
