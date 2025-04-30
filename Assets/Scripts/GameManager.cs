@@ -44,13 +44,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ColorManager colorManager;
     [SerializeField] private ModelSpawner modelSpawner;
     [SerializeField] private UIManager uIManager;
-
-    //prefabs list for spawning
-    [SerializeField] private List<GameObject> prefabs;
+    [SerializeField] private List<GameObject> prefabs; //prefabs list for spawning
     [SerializeField] private ARRaycastManager arRaycast;
-
-    //This manager can control plane detection
-    [SerializeField] private HidePlaneMesh hidePlaneManager;
+    [SerializeField] private HidePlaneMesh hidePlaneManager; //This manager can control plane detection
 
     //This empty gameobject is filled with Instatiated model from modelSpawner. If you want to control
     //or access the model already spawned, please use this variable.
@@ -60,12 +56,8 @@ public class GameManager : MonoBehaviour
     //Index of model. modelSpawner instantiate from prefabs with this index, so if you want to spawn next model,
     //please increase this variable.
     private int prefabIndex = 0;
-
-    //present phase
-    private GamePhase phase;
-
-    //flags
-    private bool isModelSpawned = false;
+    private GamePhase phase; //present phase
+    private bool isModelSpawned = false; //flags
     [SerializeField] private CutsceneManager cm;
 
     /// <summary>
@@ -168,6 +160,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This method is invoked with OnModelSpawn event. Model spawner send thier spawn model
+    /// and this method catch it, hide planes, chang phase to colordetection, and start coroutine.
+    /// </summary>
+    /// <param name="gameObject"></param>
     private void AfterModelSpawned(GameObject gameObject)
     {
         Debug.Log("model spawned");
@@ -179,6 +176,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ResetColor());
     }
 
+    /// <summary>
+    /// This coroutine reset model's color to white after 1 second.
+    /// Also, make link colormanager and answercolorlist in the model and ready for detecting.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ResetColor()
     {
         colorManager.SetAnswerColorList(modelInScene);
@@ -196,6 +198,9 @@ public class GameManager : MonoBehaviour
         yield break;
     }
 
+    /// <summary>
+    /// Start color detection. Add goal color UI and turn on whole detecting UI.
+    /// </summary>
     private void StartColorDetect()
     {
         Debug.Log("Start Color Detect");
@@ -203,6 +208,10 @@ public class GameManager : MonoBehaviour
         colorManager.MakeTargetColorUI();
     }
 
+    /// <summary>
+    /// This method connect with OnEndColorDetect event.
+    /// Start coloring phase, make coloring plalette UI, turn on coloring UI and turn off detection UI 
+    /// </summary>
     private void StartColoring()
     {
         Debug.Log("start coloring phase");
@@ -213,6 +222,13 @@ public class GameManager : MonoBehaviour
         colorManager.MakeColoringUI();
     }
 
+    /// <summary>
+    /// After finish coloring, when user press submit button, this method is worked.
+    /// It checks the coloring is right.
+    /// 
+    /// If all colors are correct, turn on successUI and success sound. Finally, go to nextmodel part.
+    /// If that are not correct, turn on FailUI and fail sound. In the scene, Retry button is turned on.
+    /// </summary>
     public void Submit()
     {
         phase = GamePhase.Evaluation;
@@ -231,6 +247,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// When user press retry button, this method is worked.
+    /// Return to coloring part and invoke resetcolor() for show correct color.
+    /// </summary>
     public void Retry()
     {
         uIManager.SetFailUI(false);
@@ -238,6 +258,10 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ResetColor());
     }
 
+    /// <summary>
+    /// When user press repose button, this method is invoked. 
+    /// Change the model position to the front of camera.
+    /// </summary>
     public void RePose()
     {
         float distance = 1.0f;
@@ -250,6 +274,12 @@ public class GameManager : MonoBehaviour
         modelInScene.transform.position = spawnPos;
     }
 
+    /// <summary>
+    /// This coroutine is invoked if subit is success. Reset all variable about current model
+    /// and go to spawn phase.
+    /// If current model is last, it turns on End UI.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ToNextModel()
     {
         yield return new WaitForSeconds(2f);
@@ -269,6 +299,12 @@ public class GameManager : MonoBehaviour
             yield break;
     }
 
+    /// <summary>
+    /// When changing model and back to main menu, the variables about specific model need to be
+    /// deleted. 
+    /// So this method reset planes, destroy current model, 
+    /// change flag and invoke colormanager's reset method.
+    /// </summary>
     private void ResetAll()
     {
         hidePlaneManager.ResetPlane();
@@ -277,6 +313,11 @@ public class GameManager : MonoBehaviour
         colorManager.ResetColorManager();
     }
 
+    /// <summary>
+    /// When back to main menu(user press main menu button), this method is invoked.
+    /// First reset data, chang phase to menu(first phase), 
+    /// reset model index and set ui to default setting.
+    /// </summary>
     public void Restart(){
         ResetAll();
         phase = GamePhase.Menu;

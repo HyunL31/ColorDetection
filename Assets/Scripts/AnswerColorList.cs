@@ -2,15 +2,33 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Manages the list of materials (colors) associated with an object or multiple paintable parts.
+/// It handles storing correct colors, changing materials to white, painting, and checking correctness.
+/// </summary>
 public class AnswerColorList : MonoBehaviour
 {
+    // List of parts that can be painted individually
     [SerializeField] private List<PaintablePart> paintableParts;
+
+    // Optional single GameObject with multiple materials
     [SerializeField] private GameObject mainGO;
+    
+    // Indices of materials that should be excluded from color detection and painting
     [SerializeField] private int[] exceptionIndex;
+    
+    // All target materials to paint
     public Material[] targetMaterials;
+    
+    // Stores the correct colors for each material
     private List<Color> rightColor;
     private Renderer rend;
 
+    /// <summary>
+    /// Initializes and instantiates materials.
+    /// If mainGO is set, uses its materials.
+    /// Otherwise, collects materials from multiple paintable parts.
+    /// </summary>
     public void SetMaterials()
     {
         if(mainGO!=null)
@@ -57,6 +75,10 @@ public class AnswerColorList : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates and returns a list of colors that need to be detected by the player.
+    /// Skips materials marked as exceptions. Also stores all correct colors.
+    /// </summary>
     public List<NewColor> SetDetectedColorList()
     {
         List<NewColor> detectColorList = new List<NewColor>();
@@ -70,6 +92,10 @@ public class AnswerColorList : MonoBehaviour
         return detectColorList;
     }
 
+    /// <summary>
+    /// Sets all paintable materials to white except for exception indices.
+    /// Used to reset the object for the coloring phase.
+    /// </summary>
     public void SetAllWhite()
     {
         for(int i = 0 ; i<targetMaterials.Length ; i++){
@@ -78,11 +104,17 @@ public class AnswerColorList : MonoBehaviour
         }        
     }
 
+    /// <summary>
+    /// Sets a specific color to a given material.
+    /// </summary>
     private void SetColor(Color color, Material mat)
     {
         mat.color = color;
     }
 
+    /// <summary>
+    /// Paints a specific material by index on a paintaleparts in model with the current color.
+    /// </summary>
     public void Coloring(Color color, GameObject gameObject)
     {
         var go = gameObject.GetComponent<PaintablePart>();
@@ -93,6 +125,9 @@ public class AnswerColorList : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Shows the correct answer colors by restoring all materials to their original color.
+    /// </summary>
     public void ShowCorrectColor()
     {
         for(int i=0 ; i<targetMaterials.Length ; i++)
@@ -101,6 +136,9 @@ public class AnswerColorList : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if all material colors match the stored correct colors.
+    /// </summary>
     public bool CheckCorrect()
     {
         for(int i=0 ; i<targetMaterials.Length ; i++)

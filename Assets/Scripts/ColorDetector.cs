@@ -1,17 +1,27 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using Unity.Collections;
-using UnityEngine.Android;
 
+/// <summary>
+/// Detects the average color from the AR camera's view in a small central region of the image.
+/// Used for color-based gameplay interactions.
+/// </summary>
 public class ColorDetector : MonoBehaviour
 {
+    // Reference to the AR camera manager component
     public ARCameraManager cameraManager;
+
+    // Temporary texture to hold camera image data
     private Texture2D cameraTexture;
+
+    // Last detected average color
     private NewColor averageColor = null;
 
+    /// <summary>
+    /// Called to detect a color from the center of the current camera frame.
+    /// Returns a NewColor object containing the detected average color.
+    /// </summary>
     public NewColor DetectColorOnDemand()
     {
         if (cameraManager.TryAcquireLatestCpuImage(out XRCpuImage image))
@@ -27,6 +37,10 @@ public class ColorDetector : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Converts a central region of the CPU image into a Texture2D,
+    /// then calculates the average color of that region.
+    /// </summary>
     private void ProcessCameraImage(XRCpuImage image)
     {
 
@@ -58,27 +72,26 @@ public class ColorDetector : MonoBehaviour
         cameraTexture.Apply();
         textureData.Dispose();
 
-        // 중앙 부분만 색상 분석
         averageColor = new NewColor(CalculateAverageColor(cameraTexture),false);
         Debug.Log(averageColor.answerColor.r);
         Debug.Log(averageColor.answerColor.g);
         Debug.Log(averageColor.answerColor.b);
     }
 
+    /// <summary>
+    /// Calculates the average color from all pixels in a texture.
+    /// </summary>
     Color CalculateAverageColor(Texture2D texture)
     {
-        Color[] pixels = texture.GetPixels();  // 텍스처의 모든 픽셀 가져오기
+        Color[] pixels = texture.GetPixels(); 
         Color sumColor = Color.black;
         int pixelCount = pixels.Length;
 
-        // 모든 픽셀의 색상 값 더하기
         foreach (Color pixel in pixels)
         {
             sumColor += pixel;
         }
 
-        // 평균 색상 계산
         return sumColor / pixelCount;
     }
-    
 }
