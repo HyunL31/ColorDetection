@@ -6,43 +6,61 @@ using UnityEngine.UI;
 using Unity.XR.CoreUtils;
 
 /// <summary>
-/// Have solution color list and check that.
-/// So this Script have compare color method and check all answers are foounded.
-/// If it works, this script execute event about that.
+/// Manages all color-related logic in the game, including:
+/// - Receiving answer colors from the model
+/// - Detecting user-captured colors and validating them
+/// - Managing color-related UI for detection and coloring
+/// - Handling painting and correctness check
 /// </summary>
 public class ColorManager : MonoBehaviour
 {
     [Header("Color Detector")]
+    // Reference to the component responsible for color detection
     [SerializeField] private ColorDetector colorDetector;
-    public float colorTolerance = 0.2f;
+    public float colorTolerance = 0.2f; // Tolerance for determining color similarity
 
     [Header("Goal Color Ui")]
-    [SerializeField] private GameObject targetColorUI;
+    // UI for displaying target colors during detection phase
+    [SerializeField] private GameObject targetColorUI; 
 
     [Header("Coloring Resource UI")]
+    // UI for displaying selectable colors during coloring phase
     [SerializeField] private GameObject coloringResUI;
+
+    // Image to display the currently selected color
     [SerializeField] private Image currentColor;
 
     [Header("Event")]
+    // Event triggered when all required colors are successfully detected
     public UnityEvent OnEndColorDetect;
 
+    // Holds the original answer color and materials information from the model
     private AnswerColorList answerColorList;
-    private List<NewColor> haveToDetect;
-    private Color presentColor;
-    private int numOfDetect = 0;
-    private int numHaveToDetect = 0;
+    private List<NewColor> haveToDetect; // List of colors that need to be detected
+    private Color presentColor; // Currently selected color to paint with
+    private int numOfDetect = 0; // Number of successfully detected colors
+    private int numHaveToDetect = 0; // Total number of colors to detect
 
+    /// <summary>
+    /// Get the answer color list from the provided model.
+    /// </summary>
     public void SetAnswerColorList(GameObject targetObject)
     {
         answerColorList = targetObject.GetComponent<AnswerColorList>();
         answerColorList.SetMaterials();
     }
 
+    /// <summary>
+    /// Sets all object materials to white (reset state).
+    /// </summary>
     public void SetWhite()
     {
         answerColorList.SetAllWhite();
     }
 
+    /// <summary>
+    /// Stores the list of colors the player must detect.
+    /// </summary>
     public void SetHaveToDetectList()
     {
         haveToDetect = answerColorList.SetDetectedColorList();
@@ -53,6 +71,11 @@ public class ColorManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This method works when user press detect button at detection phase.
+    /// Detects a color and compares it with the haveToDetect list.
+    /// If matched, marks it as found and updates UI.
+    /// </summary>
     public void DetectColor()
     {
         NewColor detectedColor = colorDetector.DetectColorOnDemand();
@@ -66,6 +89,10 @@ public class ColorManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Compares the detected color with remaining colors in the haveToDetect list.
+    /// Returns the index of a matched color, or -1 if none match.
+    /// </summary>
     private int CompareColor(NewColor newColor){
         for(int i = 0 ; i<numHaveToDetect ; i++)
         {
@@ -85,6 +112,10 @@ public class ColorManager : MonoBehaviour
         return -1;
     }
 
+    /// <summary>
+    /// Activates and sets color for UI elements that show target colors.
+    /// Called during the detection phase.
+    /// </summary>
     public void MakeTargetColorUI()
     {
         for(int i = 0 ; i<numHaveToDetect ; i++)
@@ -95,6 +126,9 @@ public class ColorManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Hides a color from the detection UI when it's detected.
+    /// </summary>
     private void MoveToColoringPart(int index)
     {
         targetColorUI.transform.GetChild(index).GetComponent<Image>().color
@@ -102,6 +136,9 @@ public class ColorManager : MonoBehaviour
         targetColorUI.transform.GetChild(index).gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Sets up the palette UI with detected colors for coloring phase.
+    /// </summary>
     public void MakeColoringUI()
     {
         for(int i = 0 ; i<numHaveToDetect ; i++)
@@ -114,34 +151,54 @@ public class ColorManager : MonoBehaviour
         presentColor = Color.white;
     }
 
+    /// <summary>
+    /// Paints the selected part of the object with the currently selected color.
+    /// </summary>
     public void Paint(GameObject touchPart)
     {
         Debug.Log("painting!");
         answerColorList.Coloring(presentColor, touchPart);
     }
 
+    /// <summary>
+    /// Sets the currently selected paint color and updates the UI.
+    /// </summary>
+    /// <param name="image"></param>
     public void SetPresentColor(Image image)
     {
         presentColor = image.color;
         SetCurrentUI(presentColor);
     }
     
+    /// <summary>
+    /// Updates the color shown in the current color UI image.
+    /// </summary>
+    /// <param name="color"></param>
     private void SetCurrentUI(Color color)
     {
         if(currentColor!=null)
             currentColor.color = color;
     }
 
+    /// <summary>
+    /// Checks whether all parts were painted with correct colors.
+    /// </summary>
     public bool CheckCorrected()
     {
         return answerColorList.CheckCorrect();
     }
 
+    /// <summary>
+    /// Reveals the correct coloring on the object (e.g. after failure).
+    /// </summary>
     public void ShowCorrect()
     {
         answerColorList.ShowCorrectColor();
     }
 
+    /// <summary>
+    /// Resets internal state and color UI for a new game round and going to main menu.
+    /// </summary>
     public void ResetColorManager()
     {
         numOfDetect = 0;
@@ -150,6 +207,9 @@ public class ColorManager : MonoBehaviour
         ResetChildObject(coloringResUI);
     }
 
+    /// <summary>
+    /// Resets all children of a given UI parent (color and visibility).
+    /// </summary>
     private void ResetChildObject(GameObject parent)
     {
         List<GameObject> gos = new List<GameObject>();
