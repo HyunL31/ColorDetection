@@ -15,24 +15,31 @@ using Unity.XR.CoreUtils;
 public class ColorManager : MonoBehaviour
 {
     [Header("Color Detector")]
+    // Reference to the component responsible for color detection
     [SerializeField] private ColorDetector colorDetector;
-    public float colorTolerance = 0.2f;
+    public float colorTolerance = 0.2f; // Tolerance for determining color similarity
 
     [Header("Goal Color Ui")]
-    [SerializeField] private GameObject targetColorUI;
+    // UI for displaying target colors during detection phase
+    [SerializeField] private GameObject targetColorUI; 
 
     [Header("Coloring Resource UI")]
+    // UI for displaying selectable colors during coloring phase
     [SerializeField] private GameObject coloringResUI;
+
+    // Image to display the currently selected color
     [SerializeField] private Image currentColor;
 
     [Header("Event")]
+    // Event triggered when all required colors are successfully detected
     public UnityEvent OnEndColorDetect;
 
+    // Holds the original answer color and materials information from the model
     private AnswerColorList answerColorList;
-    private List<NewColor> haveToDetect;
-    private Color presentColor;
-    private int numOfDetect = 0;
-    private int numHaveToDetect = 0;
+    private List<NewColor> haveToDetect; // List of colors that need to be detected
+    private Color presentColor; // Currently selected color to paint with
+    private int numOfDetect = 0; // Number of successfully detected colors
+    private int numHaveToDetect = 0; // Total number of colors to detect
 
     /// <summary>
     /// Get the answer color list from the provided model.
