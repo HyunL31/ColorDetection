@@ -52,7 +52,7 @@ public class CutsceneManager : MonoBehaviour
         TutorialBtn.SetActive(false);
         NextTextBtn.SetActive(true);
 
-        // Get background img and set first text
+        // Get background image and set first text
         BGImg = BG.GetComponent<Image>();
         Text1.text = textList[0];
         currentText += 1;
@@ -72,9 +72,10 @@ public class CutsceneManager : MonoBehaviour
         // Change text
         Text1.text = textList[currentText];
 
-        // Change background image
+        // Change background image according to phase and text
         if (currentPhase == 1)
         {
+            // Fade out dark background and set first image
             BGDark.GetComponent<Image>().CrossFadeAlpha(0.0f, 2.0f, false);
             BGImg.sprite = IMG1;
         }
@@ -99,9 +100,11 @@ public class CutsceneManager : MonoBehaviour
             BGImg.sprite = IMG5;
             if (currentText == 10)
             {
+                // Fade out background image, set button activation
                 BGImg.CrossFadeAlpha(0.0f, 2.0f, false);
                 NextTextBtn.SetActive(false);
                 TutorialBtn.SetActive(true);
+                // Set cutscene watched
                 once = false;
             }
         }

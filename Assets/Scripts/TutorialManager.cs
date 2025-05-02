@@ -38,6 +38,7 @@ public class TutorialManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // Set button activation, character image and first dialogue text   
         StartGameBtn.SetActive(false);
         NextTextBtn.SetActive(true);
         CharacterImg = Character.GetComponent<Image>();
@@ -53,6 +54,7 @@ public class TutorialManager : MonoBehaviour
         // Change text
         Text1.text = textList[currentText];
 
+        // Change character image according to dialogue
         if (currentText == 1)
         {
             CharacterImg.sprite = HandDown;
@@ -68,10 +70,10 @@ public class TutorialManager : MonoBehaviour
         else if (currentText == 4)
         {
             CharacterImg.sprite = HandDown;
+            // Deactivate dialogue button and activate button to start the game
             NextTextBtn.SetActive(false);
             StartGameBtn.SetActive(true);
         }
-        //  BGDark.GetComponent<Image>().CrossFadeAlpha(0.0f, 2.0f, false);
 
         currentText += 1;
     }
