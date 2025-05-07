@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
                 {
                     GameObject target = hit.collider.gameObject;
                     if (target != null)
-                        colorManager.Paint(gameObject);
+                        colorManager.Paint(target);
                 }
             }
 #endif
@@ -324,6 +324,8 @@ public class GameManager : MonoBehaviour
         prefabIndex = 0;
         uIManager.ReturnStart();
         uIManager.SetColorDetectUI(false);
+        uIManager.SetSuccssUI(false);
+        uIManager.SetFailUI(false);
         uIManager.SetColoringUI(false);
         hidePlaneManager.ResetPlane();
     }

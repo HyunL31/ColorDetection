@@ -21,7 +21,7 @@ public class AnswerColorList : MonoBehaviour
     public Material[] targetMaterials;
     
     // Stores the correct colors for each material
-    private List<Color> rightColor;
+    private List<Color> rightColor = new List<Color>();
     private Renderer rend;
 
     /// <summary>
